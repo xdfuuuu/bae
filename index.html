@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anniversary Surprise</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Poppins, sans-serif;
+            background-color: #e2ffff;
+            text-align: center;
+        }
+        #message {
+            font-size: 1.5rem;
+            padding: 20px;
+            background: #fff7f7;
+            border: 3px solid #71D9e2;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="message">Miss me?</div>
+
+    <script>
+        // Replace this link with the *Published CSV Link* from your Google Sheet
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSuFl0305wNdQhnDeo3eylvq9O7fyxyqQbDzzY3f7S-IBtxAjo_DxgNZZYtc8AdwgrrF3DDVJs0yY9z/pub?gid=0&single=true&output=csv';
+
+        async function fetchRandomMessage() {
+            try {
+                // Fetch the Google Sheet CSV data
+                const response = await fetch(sheetUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.text();
+
+                // Convert CSV into an array of messages
+                const messages = data.split('\n').map(row => row.trim()).filter(row => row !== '');
+
+                // Pick a random message
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+
+                // Display the random message
+                document.getElementById('message').textContent = randomMessage;
+            } catch (error) {
+                document.getElementById('message').textContent = 'Error loading the surprise.';
+                console.error('Error fetching messages:', error);
+            }
+        }
+
+        // Fetch and display the random message
+        fetchRandomMessage();
+    </script>
+</body>
+</html>
